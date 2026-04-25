@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora AI — Intelligent Leave Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="aurora-bg"></div>
+    <div class="app-container" id="appContainer">
+
+        <!-- ========== WELCOME SCREEN ========== -->
+        <div class="screen active" id="screenWelcome">
+            <div class="welcome-wrapper">
+                <div class="welcome-logo">Aurora AI</div>
+                <p class="welcome-tagline">Intelligent Leave Management, Simplified.</p>
+                <div class="welcome-card">
+                    <div class="welcome-icon">🌌</div>
+                    <h1 class="welcome-title">Welcome</h1>
+                    <p class="welcome-subtitle">Sign in to manage leave intelligently</p>
+                    <button class="btn btn-google" id="googleSignInBtn">
+                        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        Sign in with Google
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SIGN UP SCREEN ========== -->
+        <div class="screen" id="screenSignUp">
+            <div class="auth-card">
+                <h1 class="auth-title">Complete Your Profile</h1>
+                <p class="auth-subtitle">Set up your account</p>
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="signUpName" placeholder="Your full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" id="signUpPhone" placeholder="+60 12 345 6789">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">I am a...</label>
+                    <div class="role-cards">
+                        <div class="role-card" id="roleCardAdmin" onclick="selectRole('admin')">
+                            <div class="role-card-icon">🛡️</div>
+                            <div class="role-card-title">Administrator</div>
+                            <div class="role-card-desc">I manage a company</div>
+                        </div>
+                        <div class="role-card" id="roleCardEmployee" onclick="selectRole('employee')">
+                            <div class="role-card-icon">👤</div>
+                            <div class="role-card-title">Employee</div>
+                            <div class="role-card-desc">I work at a company</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="completeSignUp()">Continue →</button>
+            </div>
+        </div>
+
+        <!-- ========== ADMIN SETUP SCREEN ========== -->
+        <div class="screen" id="screenAdminSetup">
+            <div class="auth-card" style="max-width:560px;">
+                <h1 class="auth-title">🛡️ Administrator Setup</h1>
+                <p class="auth-subtitle">Create a new company or join an existing one</p>
+                <div class="role-cards">
+                    <div class="role-card" id="adminChoiceCreate" onclick="showCreateCompany()">
+                        <div class="role-card-icon">🏢</div>
+                        <div class="role-card-title">Create Company</div>
+                        <div class="role-card-desc">Start fresh</div>
+                    </div>
+                    <div class="role-card" id="adminChoiceJoin" onclick="showJoinCompanyAsAdmin()">
+                        <div class="role-card-icon">🔗</div>
+                        <div class="role-card-title">Join Company</div>
+                        <div class="role-card-desc">Use existing code</div>
+                    </div>
+                </div>
+                <div id="createCompanySection" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-input" id="companyNameInput" placeholder="e.g., TechNova Solutions">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Admin Password</label>
+                        <input type="password" class="form-input" id="adminPasswordInput" placeholder="Set a password for other admins">
+                        <p style="font-size:10px;color:var(--text-muted);margin-top:4px;">🔒 Other administrators need this password to join as admin.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="createCompany()">Create Company</button>
+                    <div id="companyCreatedBox" class="hidden mt-16">
+                        <div class="msg-box msg-success">✅ Company Created!</div>
+                        <div class="code-display-box">
+                            <div class="code-display-label">Company Code (Share with employees)</div>
+                            <div class="code-display-value" id="companyCodeDisplay"></div>
+                            <div class="code-actions mt-12">
+                                <button class="btn btn-copy btn-small" onclick="copyCode()">📋 Copy Code</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary mt-12" onclick="goToAdminDashboard()">Go to Dashboard →</button>
+                    </div>
+                </div>
+                <div id="joinCompanyAsAdminSection" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label">Company Code</label>
+                        <input type="text" class="form-input" id="joinCodeAdminInput" placeholder="e.g., TECHNOVA-7X2K">
+                    </div>
+                    <button class="btn btn-primary" onclick="verifyCompanyCodeForAdmin()">Find Company</button>
+                    <div id="adminPasswordPrompt" class="hidden mt-16">
+                        <div class="msg-box msg-success" id="foundCompanyMsg">✅ Company Found</div>
+                        <div class="form-group">
+                            <label class="form-label">Admin Password</label>
+                            <input type="password" class="form-input" id="joinAdminPasswordInput" placeholder="Enter admin password">
+                        </div>
+                        <button class="btn btn-primary" onclick="joinAsAdmin()">Verify & Join →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== EMPLOYEE JOIN SCREEN ========== -->
+        <div class="screen" id="screenEmployeeJoin">
+            <div class="auth-card">
+                <h1 class="auth-title">🔗 Join Your Company</h1>
+                <p class="auth-subtitle">Enter the company code from your admin</p>
+                <div class="form-group">
+                    <label class="form-label">Company Code</label>
+                    <input type="text" class="form-input" id="joinCodeEmpInput" placeholder="e.g., TECHNOVA-7X2K">
+                </div>
+                <button class="btn btn-primary" onclick="findCompanyEmployee()">Find Company</button>
+                <div id="empJoinSection" class="hidden mt-16">
+                    <div class="msg-box msg-success">✅ Company Found: <strong id="foundEmpCompanyName"></strong></div>
+                    <div class="form-group">
+                        <label class="form-label">Department</label>
+                        <select class="form-input" id="empDeptSelect">
+                            <option value="">Select Department</option>
+                            <option>Engineering</option>
+                            <option>Design</option>
+                            <option>Marketing</option>
+                            <option>HR</option>
+                            <option>Finance</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Role</label>
+                        <input type="text" class="form-input" id="empRoleInput" placeholder="e.g., Frontend Developer">
+                    </div>
+                    <button class="btn btn-primary" onclick="joinAsEmployee()">Join Company →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== ADMIN DASHBOARD ========== -->
+        <div class="screen" id="screenAdminDashboard">
+            <div class="dashboard-layout">
+                <div class="sidebar">
+                    <div class="sidebar-logo">Aurora AI</div>
+                    <div class="sidebar-user">
+                        <div class="sidebar-avatar" id="adminAvatar">A</div>
+                        <div>
+                            <div class="sidebar-user-name" id="adminName">Admin</div>
+                            <div class="sidebar-user-role">Administrator</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-nav">
+                        <button class="sidebar-nav-item active" onclick="adminTab('home')" id="adminNavHome">📊 Dashboard</button>
+                        <button class="sidebar-nav-item" onclick="adminTab('employees')" id="adminNavEmployees">👥 Employees</button>
+                        <button class="sidebar-nav-item" onclick="adminTab('requests')" id="adminNavRequests">📅 Today's Leaves</button>
+                        <button class="sidebar-nav-item" onclick="adminTab('conflicts')" id="adminNavConflicts">⚠️ Conflicts</button>
+                    </div>
+                    <button class="btn btn-outline" onclick="logout()" style="width:100%;margin-top:auto;">🚪 Logout</button>
+                </div>
+                <div class="main-content" id="adminMainContent">
+                    <h1 class="page-title">Admin Dashboard</h1>
+                    <p class="page-subtitle">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== EMPLOYEE DASHBOARD ========== -->
+        <div class="screen" id="screenEmployeeDashboard">
+            <div class="dashboard-layout">
+                <div class="sidebar">
+                    <div class="sidebar-logo">Aurora AI</div>
+                    <div class="sidebar-user">
+                        <div class="sidebar-avatar" id="empAvatar">E</div>
+                        <div>
+                            <div class="sidebar-user-name" id="empName">Employee</div>
+                            <div class="sidebar-user-role" id="empDeptRole">Staff</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-nav">
+                        <button class="sidebar-nav-item active" onclick="empTab('chat')" id="empNavChat">💬 AI Chat</button>
+                        <button class="sidebar-nav-item" onclick="empTab('myRequests')" id="empNavRequests">📋 My Requests</button>
+                    </div>
+                    <div class="sidebar-leave-cards">
+                        <div class="sidebar-leave-card sick">
+                            <div class="sidebar-leave-label">🤒 Sick Leave</div>
+                            <div class="sidebar-leave-count" id="sickCount">5</div>
+                            <div class="sidebar-leave-max">/ 5 remaining</div>
+                        </div>
+                        <div class="sidebar-leave-card emergency">
+                            <div class="sidebar-leave-label">🚨 Emergency</div>
+                            <div class="sidebar-leave-count" id="emergencyCount">2</div>
+                            <div class="sidebar-leave-max">/ 2 remaining</div>
+                        </div>
+                        <div class="sidebar-leave-card normal">
+                            <div class="sidebar-leave-label">📅 Normal</div>
+                            <div class="sidebar-leave-count" id="normalCount">10</div>
+                            <div class="sidebar-leave-max">/ 10 remaining</div>
+                        </div>
+                    </div>
+                    <div class="notif-bell-container mt-12" style="align-self:center;">
+                        <button class="notif-bell" id="notifBell" onclick="toggleNotifications()">🔔<span class="notif-badge hidden" id="notifBadge">0</span></button>
+                        <div class="notif-dropdown" id="notifDropdown"></div>
+                    </div>
+                    <button class="btn btn-outline" onclick="logout()" style="width:100%;">🚪 Logout</button>
+                </div>
+                <div class="main-content" id="empMainContent">
+                    <h1 class="page-title">💬 AI Leave Assistant</h1>
+                    <p class="page-subtitle">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase Modular SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBcmCvRq2rZ8Da4GCjQ_mfTH72ij_pjmu8",
+            authDomain: "aurora-ai-leavemanagement.firebaseapp.com",
+            projectId: "aurora-ai-leavemanagement",
+            storageBucket: "aurora-ai-leavemanagement.firebasestorage.app",
+            messagingSenderId: "451497259024",
+            appId: "1:451497259024:web:71f30aee8a480101809a95"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Make available globally
+        window.auth = auth;
+        window.db = db;
+        window.GoogleAuthProvider = GoogleAuthProvider;
+        window.signInWithPopup = signInWithPopup;
+        window.onAuthStateChanged = onAuthStateChanged;
+        window.signOut = signOut;
+        window.serverTimestamp = serverTimestamp;
+        window.firestoreDoc = doc;
+        window.firestoreSetDoc = setDoc;
+        window.firestoreGetDoc = getDoc;
+        window.firestoreUpdateDoc = updateDoc;
+        window.firestoreCollection = collection;
+        window.firestoreAddDoc = addDoc;
+
+        console.log('✅ Firebase initialized — Project:', firebaseConfig.projectId);
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
